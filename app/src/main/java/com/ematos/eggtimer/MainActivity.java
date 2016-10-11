@@ -1,5 +1,6 @@
 package com.ematos.eggtimer;
 
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected SeekBar timeSeeker;
     protected TextView timer;
+    protected MediaPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         timeSeeker = (SeekBar) findViewById(R.id.timeSeeker);
         timer = (TextView) findViewById(R.id.timer);
+        player = MediaPlayer.create(this, R.raw.horn);
 
         timeSeeker.setMax(600);
         timeSeeker.setProgress(30);
@@ -54,12 +57,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void controlTimer(View view) {
-        Button button = (Button) findViewById(R.id.controller);
+        final Button button = (Button) findViewById(R.id.controller);
 
         if(running) {
             button.setText("Start");
             running = false;
             countDown.cancel();
+            player.stop();
         } else {
             button.setText("Stop");
             running = true;
@@ -77,7 +81,10 @@ public class MainActivity extends AppCompatActivity {
                 public void onFinish() {
                     updateTimer(timer, 0);
                     timeSeeker.setProgress(0);
+                    button.setText("Start");
                     running = false;
+
+                    player.start();
                 }
             };
             countDown.start();
