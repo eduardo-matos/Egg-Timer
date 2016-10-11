@@ -38,5 +38,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="77dp"
-        android:id="@+id/startStop" />
+        android:id="@+id/controller"
+        android:onClick="controlTimer" />
 </RelativeLayout>

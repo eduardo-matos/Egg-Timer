@@ -1,19 +1,28 @@
 package com.ematos.eggtimer;
 
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    protected boolean running = false;
+    protected CountDownTimer countDown;
+
+    protected SeekBar timeSeeker;
+    protected TextView timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SeekBar timeSeeker = (SeekBar) findViewById(R.id.timeSeeker);
-        final TextView timer = (TextView) findViewById(R.id.timer);
+        timeSeeker = (SeekBar) findViewById(R.id.timeSeeker);
+        timer = (TextView) findViewById(R.id.timer);
 
         timeSeeker.setMax(600);
         timeSeeker.setProgress(30);
@@ -42,5 +51,36 @@ public class MainActivity extends AppCompatActivity {
         int seconds = progress - (minutes * 60);
 
         timer.setText(String.format("%02d:%02d", minutes, seconds));
+    }
+
+    public void controlTimer(View view) {
+        Button button = (Button) findViewById(R.id.controller);
+
+        if(running) {
+            button.setText("Start");
+            running = false;
+            countDown.cancel();
+        } else {
+            button.setText("Stop");
+            running = true;
+
+            countDown = new CountDownTimer(timeSeeker.getProgress() * 1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    int progress = (int)millisUntilFinished/1000;
+                    Log.i("Millis", progress + "");
+                    updateTimer(timer, progress);
+                    timeSeeker.setProgress(progress);
+                }
+
+                @Override
+                public void onFinish() {
+                    updateTimer(timer, 0);
+                    timeSeeker.setProgress(0);
+                    running = false;
+                }
+            };
+            countDown.start();
+        }
     }
 }
