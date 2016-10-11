@@ -13,18 +13,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SeekBar timeSeeker = (SeekBar) findViewById(R.id.timeSeeker);
+        final TextView timer = (TextView) findViewById(R.id.timer);
+
         timeSeeker.setMax(600);
         timeSeeker.setProgress(30);
-
-        final TextView timer = (TextView) findViewById(R.id.timer);
+        updateTimer(timer, timeSeeker.getProgress());
 
         timeSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int minutes = progress / 60;
-                int seconds = progress - (minutes * 60);
-
-                timer.setText(String.format("%02d:%02d", minutes, seconds));
+                updateTimer(timer, progress);
             }
 
             @Override
@@ -37,5 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    final protected void updateTimer(TextView timer, int progress) {
+        int minutes = progress / 60;
+        int seconds = progress - (minutes * 60);
+
+        timer.setText(String.format("%02d:%02d", minutes, seconds));
     }
 }
