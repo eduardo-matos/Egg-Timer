@@ -61,11 +61,13 @@ public class MainActivity extends AppCompatActivity {
 
         if(running) {
             button.setText("Start");
+            timeSeeker.setEnabled(true);
             running = false;
             countDown.cancel();
             player.stop();
         } else {
             button.setText("Stop");
+            timeSeeker.setEnabled(false);
             running = true;
 
             countDown = new CountDownTimer(timeSeeker.getProgress() * 1000, 1000) {
