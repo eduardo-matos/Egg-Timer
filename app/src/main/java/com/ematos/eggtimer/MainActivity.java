@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             timeSeeker.setEnabled(false);
             running = true;
 
-            countDown = new CountDownTimer(timeSeeker.getProgress() * 1000, 1000) {
+            countDown = new CountDownTimer(timeSeeker.getProgress() * 1000 + 100, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     int progress = (int)millisUntilFinished/1000;
